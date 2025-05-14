@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aayham | @yield('title')</title>
+    <title>رُقي العطور
+        | @yield('title')</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -101,7 +102,7 @@
 <body>
     <!-- السايد بار -->
     <div class="sidebar" id="sidebar">
-        <h3 class="text-center m-1 text-2xl">ALAYHAM</h3>
+        <h3 class="text-center m-1 text-2xl">رُقي العطور</h3>
         <hr>
         <ul>
             <li class="mb-4">
@@ -122,12 +123,12 @@
                     <i class="fas fa-tags ml-3"></i> الفئات
                 </a>
             </li>
-<li class="mb-4">
-    <a href="{{ route('earningsReport') }}"
-        class="hover:bg-gray-700 p-2 block rounded-lg text-white flex items-center">
-        <i class="fas fa-chart-line ml-3"></i> تقرير الأرباح
-    </a>
-</li>
+            <li class="mb-4">
+                <a href="{{ route('earningsReport') }}"
+                    class="hover:bg-gray-700 p-2 block rounded-lg text-white flex items-center">
+                    <i class="fas fa-chart-line ml-3"></i> تقرير الأرباح
+                </a>
+            </li>
             <li class="mb-4">
                 <a href="{{ route('packages.index') }}"
                     class="hover:bg-gray-700 p-2 block rounded-lg text-white flex items-center">
@@ -162,7 +163,7 @@
             </li>
             @if (Auth::id() === 1)
                 <li class="mb-4">
-                    <a href="{{ route('admin.create') }}"
+                    <a href="{{ route('index.admins') }}"
                         class="hover:bg-gray-700 p-2 block rounded-lg text-white flex items-center">
                         <i class="fas fa-user-cog ml-3"></i> الأدمن
                     </a>
@@ -205,8 +206,8 @@
                     <!-- أيقونة الإشعارات -->
                     <div class="relative" x-data="{ open: false }">
                         <button @click="open = !open" class="relative text-gray-700 hover:text-blue-800">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
-                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14V10a6 6 0 00-12 0v4c0 .386-.146.735-.405 1.002L4 17h5m6 0a3 3 0 11-6 0">
                                 </path>
@@ -249,36 +250,35 @@
                         </li>
 
                         @php
-                            $segments = Request::segments();
-                            $url = '';
+$segments = Request::segments();
+$url = '';
                         @endphp
 
                         @foreach ($segments as $index => $segment)
-                            @php
-                                $url .= '/' . $segment;
-                                $isLast = $loop->last;
-                                $segmentName = $segment == 'admin' ? ' Dashboard' : ucfirst($segment);
-                                $segmentUrl = $segment == 'admin' ? '/dashboard' : $url;
-                            @endphp
+                                                @php
+    $url .= '/' . $segment;
+    $isLast = $loop->last;
+    $segmentName = $segment == 'admin' ? ' Dashboard' : ucfirst($segment);
+    $segmentUrl = $segment == 'admin' ? '/dashboard' : $url;
+                                                @endphp
 
-                            <li class="flex items-center">
-                                <svg class="w-3 h-3 text-gray-400 mx-1 rotate-180" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="m1 9 4-4-4-4" />
-                                </svg>
+                                                <li class="flex items-center">
+                                                    <svg class="w-3 h-3 text-gray-400 mx-1 rotate-180" aria-hidden="true"
+                                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="m1 9 4-4-4-4" />
+                                                    </svg>
 
-                                @if (!$isLast)
-                                    <a href="{{ url($segmentUrl) }}"
-                                        class="ms-1 text-sm font-semibold hover:text-green-800">
-                                        {{ $segmentName }}
-                                    </a>
-                                @else
-                                    <span class="ms-1 text-sm font-bold text-red-500">
-                                        {{ $segmentName }}
-                                    </span>
-                                @endif
-                            </li>
+                                                    @if (!$isLast)
+                                                        <a href="{{ url($segmentUrl) }}" class="ms-1 text-sm font-semibold hover:text-green-800">
+                                                            {{ $segmentName }}
+                                                        </a>
+                                                    @else
+                                                        <span class="ms-1 text-sm font-bold text-red-500">
+                                                            {{ $segmentName }}
+                                                        </span>
+                                                    @endif
+                                                </li>
                         @endforeach
                     </ol>
                 </nav>
@@ -289,13 +289,13 @@
 
             <!-- Script لتفعيل الدروب داون -->
             <script>
-                document.getElementById('notification-btn').addEventListener('click', function() {
+                document.getElementById('notification-btn').addEventListener('click', function () {
                     let dropdown = document.getElementById('notification-dropdown');
                     dropdown.classList.toggle('hidden');
                 });
 
                 // إغلاق القائمة عند الضغط خارجها
-                document.addEventListener('click', function(event) {
+                document.addEventListener('click', function (event) {
                     let dropdown = document.getElementById('notification-dropdown');
                     let button = document.getElementById('notification-btn');
 
@@ -340,7 +340,7 @@
             "timeOut": "3000"
         };
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             @if (session('success'))
                 toastr.success("{{ session('success') }}");
             @endif

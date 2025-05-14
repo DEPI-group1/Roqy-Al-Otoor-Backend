@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\images;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ImageController extends Controller
@@ -37,21 +38,11 @@ class ImageController extends Controller
     }
 
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-
-
     public function store(Request $request)
     {
         // 
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // تأكد من أن الملف صورة
+            'image' => 'required',
             'location' => 'required|string',
             'belongsTo' => 'nullable|string|max:255',
         ]);
@@ -68,85 +59,47 @@ class ImageController extends Controller
         return redirect()->back()->with('success', 'تم رفع الصورة بنجاح!');
     }
 
-
-
-
-
-
-
-    // public function store(Request $request)
+    // public function destroy($id)
     // {
-    //     // 🔹 تحقق من صحة البيانات
-    //     $request->validate([
-    //         'image' => 'required',
-    //         'location' => 'required|string',
-    //         'belongsTo' => 'nullable|string|max:255',
-    //     ]);
+    //     $image = images::findOrFail($id);
 
-    //     // 🔹 حفظ الصورة في مجلد `storage/app/public/images`
-    //     $path = $request->file('image')->store('uploads', 'public');
+    //     // حذف الصورة من المسار
+    //     if (file_exists(public_path('storage/uploads/' . $image->image))) {
+    //         unlink(public_path('storage/uploads/' . $image->images));
+    //     }
 
-    //     // 🔹 تخزين معلومات الصورة في قاعدة البيانات
-    //     images::create([
-    //         'image' => $path,
-    //         'location' => $request->location,
-    //         'belongsTo' => $request->description,
-    //     ]);
+    //     // حذف السطر من قاعدة البيانات
+    //     $image->delete();
 
-    //     // 🔹 إعادة توجيه مع رسالة نجاح
-    //     return redirect()->back()->with('success', 'تم رفع الصورة بنجاح!');
+    //     return response()->with('success', 'تم حذف الصورة بنجاح!');
     // }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(images $image)
+
+
+
+
+
+
+    public function destroy($id)
     {
-        //
-    }
+        // العثور على الصورة في قاعدة البيانات
+        $image = images::find($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(images $image)
-    {
-        //
-    }
+        if ($image) {
+            // حذف الصورة من التخزين
+            $imagePath = storage_path('app/public/' . $image->image);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, images $image)
-    {
-        //
-    }
+            if (file_exists($imagePath)) {
+                unlink($imagePath); // حذف الصورة من السيرفر
+            }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(images $image)
-    {
-        //
+            // حذف السجل من قاعدة البيانات
+            $image->delete();
 
-    }
-    /**
-     * حذف صورة منتج معينة.
-     */
-
-    public function deleteImage($id)
-    {
-        $image = images::findOrFail($id); // البحث عن الصورة
-
-        // حذف الصورة من التخزين
-        $imagePath = storage_path('app/public/' . $image->image);
-
-        if (file_exists($imagePath) && is_file($imagePath)) {
-            Storage::disk('public')->delete($image->image);
+            // إرسال رسالة النجاح بعد الحذف وإعادة التوجيه
+            return redirect()->back()->with('success', 'تم حذف الصورة بنجاح!');
+        } else {
+            return redirect()->back()->with('error', 'الصورة غير موجودة.');
         }
-
-        // حذف الصورة من قاعدة البيانات
-        $image->delete();
-
-        return response()->json(['success' => true, 'message' => 'تم حذف الصورة بنجاح!']);
     }
 }

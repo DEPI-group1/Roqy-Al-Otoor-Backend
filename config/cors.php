@@ -33,5 +33,5 @@ return [
 
     'max_age' => 0,
 
-    'supports_credentials' => false, // غيرها لـ true إذا كنت تستخدم authentication
+    'supports_credentials' => false, // authentication
 ];

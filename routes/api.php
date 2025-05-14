@@ -26,14 +26,19 @@ Route::get('/products/category/{id}', [CategoryController::class, 'getByCategory
 Route::get('/images', [ImageController::class, 'DisplayImagesToUser']);
 
 // Route::middleware('auth:sanctum')->get('/user/orders', [OrderController::class, 'getOrders']);
-Route::middleware([EnsureFrontendRequestsAreStateful::class, 'auth:sanctum'])->post('/coupons', [CouponController::class, 'applyCoupon']);
-Route::middleware([EnsureFrontendRequestsAreStateful::class, 'auth:sanctum'])->put('/profile/update', [ProfileController::class, 'updateProfile']);
-Route::middleware([EnsureFrontendRequestsAreStateful::class, 'auth:sanctum'])->get('/profile', [ProfileController::class, 'getProfile']);
-Route::middleware([EnsureFrontendRequestsAreStateful::class, 'auth:sanctum'])->get('/user/orders', [OrderController::class, 'getOrders']);
-
-// Route::get('/user/orders', [OrderController::class, 'getOrders']);
+Route::middleware([EnsureFrontendRequestsAreStateful::class, 'auth:sanctum'])
+    ->post('/coupons', [CouponController::class, 'applyCoupon']);
+Route::middleware([EnsureFrontendRequestsAreStateful::class, 'auth:sanctum'])
+    ->get('/coupons/validate/{couponCode}', [CouponController::class, 'validateCoupon']);
+Route::middleware([EnsureFrontendRequestsAreStateful::class, 'auth:sanctum'])
+    ->put('/profile/update', [ProfileController::class, 'updateProfile']);
+Route::middleware([EnsureFrontendRequestsAreStateful::class, 'auth:sanctum'])
+    ->get('/profile', [ProfileController::class, 'getProfile']);
+Route::middleware([EnsureFrontendRequestsAreStateful::class, 'auth:sanctum'])
+    ->get('/user/orders', [OrderController::class, 'getOrders']);
+// 
 // 
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+// Route::get('/user', function (Request $request) {
+//     return $request->user();
+// })->middleware('auth:sanctum');

@@ -30,7 +30,7 @@ use App\Http\Controllers\AuthController;
 
 
 
-Route::get('test', [AuthController::class,'register']);
+Route::get('test', [AuthController::class, 'register']);
 
 
 Route::get('register', [RegisteredUserController::class, 'create'])
@@ -87,7 +87,7 @@ Route::prefix('admin')->group(function () {
     // Route::resource('products', ProductController::class)->except(['show']);
     Route::get('/products', [ProductController::class, 'index'])->name('products');  // عرض جميع المنتجات
     Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');  // عرض جميع المنتجات
-    Route::get('/products/store', [ProductController::class, 'store'])->name('products.store');
+    Route::post('/products/store', [ProductController::class, 'store'])->name('products.store');
     Route::get('/products/show/{product}', [ProductController::class, 'show'])->name('products.show');
     Route::get('/products/edit/{id}', [ProductController::class, 'edit'])->name('products.edit');
     // Route::put('/product/update/{product}', [ProductController::class, 'update'])->name('product.update');
@@ -113,14 +113,14 @@ Route::prefix('admin')->group(function () {
     Route::get('/control', [AdminControl::class, 'index'])->name('control');
     Route::post('/control/store', [AdminControl::class, 'store'])->name('control.store');
     Route::delete('/control/{id}', [AdminControl::class, 'destroy'])->name('control.destroy');
-    Route::delete('/images/{id}', [ImageController::class, 'deleteImage'])->name('carousel.image.delete');
+    // Route::delete('/images/{id}', [ImageController::class, 'destroy'])->name('images.destroy');
     Route::get('/add-image', [ImageController::class, 'index'])->name('add-image');
     Route::post('/images/store', [ImageController::class, 'store'])->name('images.store');
-
     Route::get('/offers', [OfferController::class, 'index'])->name('offers.index');
     // -------------------------------
     Route::get('/earnings-report', [AdminController::class, 'earningsReport'])->name('earningsReport');
-})->middleware('sauth:anctum');
+})->middleware('auth:sanctum');
+Route::delete('/admin/images/{id}', [ImageController::class, 'destroy'])->name('images.destroy');
 
 
 // ---------------- Offer Management ----------------
@@ -164,6 +164,7 @@ Route::get('/order/{id}/return-form', [OrderController::class, 'ReturnForm'])->n
 
 
 Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin/admins', [AdminController::class, 'displayAdmins'])->name('index.admins');
     Route::get('/admin/create', [AdminController::class, 'create'])->name('admin.create');
     Route::post('/admin/store', [AdminController::class, 'storeAdmin'])->name('admin.store');
 });
@@ -178,6 +179,7 @@ Route::prefix('profile')->group(function () {
 
 // ---------------- Dashboard Route ----------------
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'admin'])->name('dashboard');
+Route::get('/', [DashboardController::class, 'index'])->middleware(['auth', 'admin'])->name('dashboard');
 
 
 // ---------------- Team Work ----------------

@@ -159,7 +159,10 @@ class CouponController extends Controller
     {
         $user = Auth::user();  // التحقق من المستخدم عبر التوكن
         if (!$user) {
-            return response()->json(['error' => 'لم يتم العثور على التوكن، الرجاء تسجيل الدخول'], 401);
+            return response()->json([
+                'success' => false,
+                'message' => 'لم يتم العثور على التوكن، الرجاء تسجيل الدخول'
+            ], 401);
         }
 
         // التحقق من وجود الكوبون
@@ -168,7 +171,7 @@ class CouponController extends Controller
             ->first();
 
         if (!$coupon) {
-            return response()->json(['success' => false, 'message' => 'الكوبون غير صالح أو انتهت صلاحيته.']);
+            return response()->json(['success' => false, 'message' => 'الكوبون غير صالح   .']);
         }
 
         // التحقق إذا كان المستخدم قد استخدم الكوبون سابقًا
@@ -229,81 +232,28 @@ class CouponController extends Controller
         ]);
     }
 
+    // التحقق من صلاحية الكوبون
+    public function validateCoupon($couponCode)
+    {
+        // تحقق من وجود الكوبون وصلاحية التاريخ
+        $coupon = Coupon::where('code', $couponCode)
+            ->where('expires_at', '>=', Carbon::now())
+            ->first();
 
+        if (!$coupon) {
+            return response()->json([
+                'success' => false,
+                'message' => 'تم إلغاء الكوبون بسبب انتهاء صلاحيته أو عدم وجوده.'
+            ]);
+        }
 
-
-
-
-
-
-
-
-
-
-
-    // public function applyCoupon(Request $request)
-    // {
-    //     $user = Auth::user();  // التحقق من المستخدم عبر التوكن
-    //     if (!$user) {
-    //         return response()->json(['error' => 'لم يتم العثور على التوكن، الرجاء تسجيل الدخول'], 401);
-    //     }
-
-    //     // التحقق من وجود الكوبون
-    //     $coupon = Coupon::where('code', $request->coupon)
-    //         ->where('expires_at', '>=', Carbon::now())  // تحقق من أن الكوبون لم ينتهِ
-    //         ->first();
-
-    //     if (!$coupon) {
-    //         return response()->json(['success' => false, 'message' => 'الكوبون غير صالح أو انتهت صلاحيته.']);
-    //     }
-
-    //     // التحقق إذا كان المستخدم قد استخدم الكوبون سابقًا
-    //     $usedBefore = CouponUsage::where('coupon_id', $coupon->id)
-    //         ->where('user_id', Auth::id())
-    //         ->exists();
-
-    //     if ($usedBefore) {
-    //         return response()->json(['success' => false, 'message' => 'لقد قمت باستخدام هذا الكوبون من قبل.']);
-    //     }
-
-    //     // التحقق من عدد الاستخدامات المسموح بها
-    //     $usageCount = CouponUsage::where('coupon_id', $coupon->id)
-    //         ->where('user_id', Auth::id())
-    //         ->count();
-
-    //     if ($coupon->usage_limit && $usageCount >= $coupon->usage_limit) {
-    //         return response()->json(['success' => false, 'message' => 'لقد قمت باستخدام هذا الكوبون من قبل.']);
-    //     }
-
-    //     // التحقق من نوع الخصم
-    //     $discount = 0;
-
-    //     if ($coupon->discount_type == 'fixed') {
-    //         $discount = $coupon->fixed_amount;
-    //     } elseif ($coupon->discount_type == 'percentage') {
-    //         $discount = ($request->subtotal * $coupon->discount_percentage) / 100;
-    //         // التحقق من الحد الأقصى للخصم
-    //         if ($coupon->max_discount_amount && $discount > $coupon->max_discount_amount) {
-    //             $discount = $coupon->max_discount_amount;
-    //         }
-    //     }
-
-    //     // إضافة الكوبون إلى سجل الاستخدام (إذا كان الكوبون له حد للاستخدام)
-    //     if ($coupon->usage_limit) {
-    //         DB::table('coupon_usage')->insert([
-    //             'user_id' => Auth::id(),
-    //             'coupon_id' => $coupon->id,
-    //             'used_at' => now()
-    //         ]);
-    //     }
-    //     // إذا كانت صلاحية الكوبون قد انتهت، يتم إلغاء الخصم
-    //     if (Carbon::now()->gt($coupon->expires_at)) {
-    //         $discount = 0;  // إلغاء الخصم
-    //     }
-    //     return response()->json([
-    //         'success' => true,
-    //         'message' => 'تم تطبيق الكوبون بنجاح.',
-    //         'discount' => $discount
-    //     ]);
-    // }
+        return response()->json([
+            'success' => true,
+            'message' => 'الكوبون صالح.',
+            'discount_type' => $coupon->discount_type,
+            'discount' => $coupon->discount_type == 'fixed'
+                ? $coupon->fixed_amount
+                : $coupon->discount_percentage,
+        ]);
+    }
 }

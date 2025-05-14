@@ -41,6 +41,13 @@ class AdminController extends Controller
         return view('admin.admins.add-admin');
     }
 
+
+    public function displayAdmins(){
+        $admins = User::where('role', 'admin')->get();
+        return view('admin.admins.admins', compact('admins'));
+    }
+    
+
     public function storeAdmin(Request $request)
     {
         // dd($request); // جرب هذه بدل all()

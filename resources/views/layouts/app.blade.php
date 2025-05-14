@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <meta name="user-logged-in" content="{{ Auth::check() ? 'true' : 'false' }}">
-    <title>{{ config('app.name', 'Alayham') }} || @yield('title', 'الرئيسية')</title>
+    <title>{{ config('app.name', ' رُقي العطور') }} || @yield('title', 'الرئيسية')</title>
     <link rel="icon" href="{{ asset('storage/favicon.ico') }}">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -72,7 +72,7 @@
         @include('layouts.footer')
     </div>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             setupImageGallery();
             setupCart();
         });
@@ -86,17 +86,17 @@
             const closeModalButton = document.querySelector("#imageModal button");
 
             thumbnails.forEach(thumbnail => {
-                thumbnail.addEventListener("click", function() {
+                thumbnail.addEventListener("click", function () {
                     mainImage.src = this.src;
                 });
             });
 
-            mainImage.addEventListener("click", function() {
+            mainImage.addEventListener("click", function () {
                 modalImage.src = this.src;
                 imageModal.classList.remove("hidden");
             });
 
-            closeModalButton.addEventListener("click", function() {
+            closeModalButton.addEventListener("click", function () {
                 imageModal.classList.add("hidden");
             });
         }
@@ -135,7 +135,7 @@
 
         // ✅ إضافة الأحداث لعربة التسوق
         function setupCartEventListeners() {
-            document.addEventListener("click", function(event) {
+            document.addEventListener("click", function (event) {
                 let target = event.target;
 
                 if (target.classList.contains("delete-btn")) {

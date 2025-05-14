@@ -14,13 +14,20 @@ class ProfileController extends Controller
 {
     public function getProfile()
     {
-        $user = User::where('id', 13)->get();
+        $user = Auth::user();
 
         if (!$user) {
             return response()->json(['message' => 'User Not Found'], 404);
         }
 
-        return response()->json(['user' => $user]);
+        $userData = [
+            'name' => $user->name,
+            'email' => $user->email,
+            'phone_number' => $user->phone_number,
+            'created_at' => $user->created_at,
+        ];
+
+        return response()->json(['user' => $userData]);
     }
 
 
